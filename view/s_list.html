@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/assets/css/layui.css">
+    <link rel="stylesheet" href="/static/assets/css/view.css"/>
+    <title>管理后台</title>
+</head>
+<body class="layui-view-body">
+<div class="layui-content">
+    <div class="layui-page-header">
+        <div class="pagewrap">
+                <span class="layui-breadcrumb">
+                  <a href="">首页</a>
+                  <a href="">控制台</a>
+                  <a><cite>服务器</cite></a>
+                </span>
+            <h2 class="title">服务器</h2>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="form-box">
+                    <div class="layui-form layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-form-mid">搜索:</div>
+                            <div class="layui-input-inline" style="width: 20vw;">
+                                <input id="keyword" type="text" autocomplete="off" class="layui-input">
+                            </div>
+                            <button onclick="search()" id="search" class="layui-btn layui-btn-blue">查询</button>
+                            <button onclick="getinfo()" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                    <button onclick="add()" class="layui-btn layui-btn-blue"><i class="layui-icon">&#xe654;</i>新增</button>
+                    <table id="server_list" lay-filter="server_list"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/static/assets/layui.all.js?v=1"></script>
+<script src="/static/js/net.js?v=1.3"></script>
+<script src="/static/js/console.js?v=1.93"></script>
+</body>
+</html>
