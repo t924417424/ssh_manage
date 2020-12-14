@@ -12,6 +12,7 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/gorm v1.9.16
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/pkg/sftp v1.12.0
 	github.com/satori/go.uuid v1.2.0
-	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
 )

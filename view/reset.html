@@ -52,5 +52,16 @@
 <script src="/static/js/net.js?v=1.0"></script>
 <script src="/static/js/aes.js?v=1.6"></script>
 <script src="/static/js/add.js?v=1.95"></script>
+<script>
+    var index = layer.load(0, {shade: [0.1,'#fff']});
+    document.onreadystatechange = completeLoading;
+    //加载状态为complete时移除loading效果
+    function completeLoading() {
+        console.log("Loading Success")
+        if (document.readyState == "complete") {
+            layer.close(index);
+        }
+    }
+</script>
 </body>
 </html>

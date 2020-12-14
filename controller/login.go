@@ -25,7 +25,7 @@ func Login(c *gin.Context) {
 			defer db.Close()
 			db.DB.Where(model.User{Phone: user.Phone}).FirstOrCreate(&userinfo)
 			new_token, err := common.ReleaseToken(userinfo.ID)
-			if err == nil {
+			if err == nil && userinfo.ID > 0 {
 				resp.Code = errcode.C_nil_err
 				resp.Msg = "登陆成功"
 				resp.Data = userinfo

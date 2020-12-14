@@ -117,12 +117,12 @@ func WsSsh(c *gin.Context) {
 	}
 	defer ssConn.Close()
 
-	quitChan := make(chan bool, 2)
+	quitChan := make(chan bool, 3)
 
 	// most messages are ssh output, not webSocket input
 	go ssConn.ReceiveWsMsg(wsConn, quitChan)
 	go ssConn.SendComboOutput(wsConn, quitChan)
-	//go ssConn.SessionWait(quitChan)
+	go ssConn.SessionWait(quitChan)
 
 	<-quitChan //任意协程退出则结束
 	fmt.Println("Exit")

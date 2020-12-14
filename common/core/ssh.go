@@ -11,6 +11,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	//"github.com/pkg/sftp"
 )
 
 func NewSshClient(server Server) (*ssh.Client, error) {
@@ -27,6 +28,8 @@ func NewSshClient(server Server) (*ssh.Client, error) {
 	//}
 	addr := fmt.Sprintf("%s:%d", server.Ip, server.Port)
 	c, err := ssh.Dial("tcp", addr, config)
+	//s,_ := sftp.NewClient(c)
+	//s.Write()
 	if err != nil {
 		return nil, err
 	}

@@ -11,6 +11,9 @@ ssh2ws部分代码修改自https://github.com/hequan2017/go-webssh
 ## 开发框架
 Gin + gorm
 
+## 更新日志
+    2020/12/14 修复无操作自动断开、修复网络延迟造成的js加载延迟问题
+
 ## 开发计划
 ✔ ssh功能
 

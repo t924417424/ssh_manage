@@ -41,4 +41,15 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/layer/3.1.1/layer.min.js"></script>
 <script src="/static/js/net.js"></script>
 <script src="/static/js/main.js"></script>
+<script>
+    var index = layer.load(0, {shade: [0.1,'#fff']});
+    document.onreadystatechange = completeLoading;
+    //加载状态为complete时移除loading效果
+    function completeLoading() {
+        console.log("Loading Success")
+        if (document.readyState == "complete") {
+            layer.close(index);
+        }
+    }
+</script>
 </html>
