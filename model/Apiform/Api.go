@@ -100,7 +100,10 @@ func (l *Login) Verify() (key, code string) {
 func (t *GetTerm) Decode(server model.Server) (sid string, err error) {
 	sid = uuid.Must(uuid.NewV4(), nil).String()
 	//log.Println(server)
-	s_pass := common.AesDecryptCBC(server.Password, []byte(t.Password))
+	s_pass,err := common.AesDecryptCBC(server.Password, []byte(t.Password))
+	if err != nil{
+		return "",err
+	}
 	if s_pass == "" {
 		return "", errors.New("秘钥验证失败")
 	} else {

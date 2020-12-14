@@ -130,7 +130,7 @@ func (ssConn *SshConn) ReceiveWsMsg(wsConn *websocket.Conn, exitCh chan bool) {
 				Cols: 180,
 			}
 			if err := json.Unmarshal(wsData, &msgObj); err != nil {
-				log.Println("unmarshal websocket message failed:",string(wsData))
+				log.Println("unmarshal websocket message failed:", string(wsData))
 				continue
 			}
 			switch msgObj.Type {
@@ -171,9 +171,6 @@ func (ssConn *SshConn) SendComboOutput(wsConn *websocket.Conn, exitCh chan bool)
 		case <-tick.C:
 			//write combine output bytes into websocket response
 			if err := flushComboOutput(ssConn.ComboOutput, wsConn); err != nil {
-				if err == io.EOF{
-					log.Println("Exit")
-				}
 				log.Println(err.Error())
 				//logrus.WithError(err).Error("ssh sending combo output to webSocket failed")
 				return
@@ -185,9 +182,22 @@ func (ssConn *SshConn) SendComboOutput(wsConn *websocket.Conn, exitCh chan bool)
 }
 
 func (ssConn *SshConn) SessionWait(quitChan chan bool) {
-	if err := ssConn.Session.Wait(); err != nil {
-		log.Println("ssh session wait failed")
-		setQuit(quitChan)
+	//if err := ssConn.Session.Wait(); err != nil {
+	//	log.Println("ssh session wait failed")
+	//	setQuit(quitChan)
+	//}
+	timer := time.NewTicker(time.Second * 3)
+	defer timer.Stop()
+	for {
+		select {
+		case <-timer.C:
+			{
+				if _, err := ssConn.StdinPipe.Write([]byte{32,127}); err != nil {
+					log.Println("ws cmd bytes write to ssh.stdin pipe failed")
+					return
+				}
+			}
+		}
 	}
 }
 
