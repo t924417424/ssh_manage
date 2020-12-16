@@ -110,13 +110,11 @@ func WsSsh(c *gin.Context) {
 	}
 	defer client.Close()
 	//startTime := time.Now()
-	ssConn, err := core.NewSshConn(cols, rows, client)
-
+	ssConn, err := core.NewSshConn(cols, rows, client)		//加入sftp客户端
 	if core.WshandleError(wsConn, err) {
 		return
 	}
 	defer ssConn.Close()
-
 	quitChan := make(chan bool, 3)
 
 	// most messages are ssh output, not webSocket input

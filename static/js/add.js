@@ -54,10 +54,12 @@ editpass = function () {
     obj.password = obj.desc
     delete obj.setpass; //不提交用户的加密密码
     console.log(obj)
+    parent.open_repass_index = 0;
     http_send("/repass", obj)
 }
 
 add_callback = function (result) {
+    parent.open_add_index = 0;
     parent.getinfo();
     parent.layer.closeAll('iframe');
 }

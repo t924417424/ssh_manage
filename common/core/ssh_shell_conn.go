@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/gorilla/websocket"
+	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
 	"io"
 	"log"
@@ -47,6 +48,7 @@ type SshConn struct {
 	// Write() be called to receive data from ssh server
 	ComboOutput *wsBufferWriter
 	Session     *ssh.Session
+	SftpClient  *sftp.Client
 }
 
 //flushComboOutput flush ssh.session combine output into websocket response
@@ -96,14 +98,20 @@ func NewSshConn(cols, rows int, sshClient *ssh.Client) (*SshConn, error) {
 	if err := sshSession.Shell(); err != nil {
 		return nil, err
 	}
-	return &SshConn{StdinPipe: stdinP, ComboOutput: comboWriter, Session: sshSession}, nil
+	sftpclient, err := sftp.NewClient(sshClient)	//创建一个sftp客户端
+	if err != nil {
+		return nil, err
+	}
+	return &SshConn{StdinPipe: stdinP, ComboOutput: comboWriter, Session: sshSession, SftpClient: sftpclient}, nil
 }
 
 func (s *SshConn) Close() {
 	if s.Session != nil {
 		s.Session.Close()
 	}
-
+	if s.SftpClient != nil{
+		s.SftpClient.Close()
+	}
 }
 
 //ReceiveWsMsg  receive websocket msg do some handling then write into ssh.session.stdin
@@ -192,7 +200,7 @@ func (ssConn *SshConn) SessionWait(quitChan chan bool) {
 		select {
 		case <-timer.C:
 			{
-				if _, err := ssConn.StdinPipe.Write([]byte{32,127}); err != nil {
+				if _, err := ssConn.StdinPipe.Write([]byte{32, 127}); err != nil {
 					log.Println("ws cmd bytes write to ssh.stdin pipe failed")
 					return
 				}

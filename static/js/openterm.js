@@ -1,3 +1,9 @@
+$("#key").keydown(function(e) {
+    if (e.keyCode == 13) {
+        openterm();
+        return false
+    }
+});
 openterm = function () {
     var pass_info = $('form').serializeArray();
     var obj = {}; //声明一个对象
@@ -10,6 +16,7 @@ openterm = function () {
 
 openterm_callback = function (result) {
     parent.layer.closeAll('iframe');
+    parent.open_terminal_index = 0;
     parent.getinfo();
     var getData = GetRequest();
     if (top) {

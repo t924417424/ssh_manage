@@ -12,20 +12,25 @@ setnickname = function (data) {
         username: data.Username
     })
 }
-
+var open_repass_index = 0;
 openpass = function (ID) {
     //console.log(ID)
-    layer.open({
-        maxmin : true,
+    if(open_repass_index > 0){
+        return false
+    }
+    open_repass_index = layer.open({
         type: 2,
         maxmin : true,
         title: '重置加密密码',
-        shadeClose: true,
         shade: 0.4,
         mask: true,
         //maxmin: true, //开启最大化最小化按钮
         area: ['30vw', '50vh'],
-        content: '/setpass?id=' + ID
+        content: '/setpass?id=' + ID,
+        shadeClose: false,
+        cancel: function(){
+            open_repass_index = 0
+        }
     });
 }
 
@@ -142,18 +147,24 @@ search = function () {
         , data: data.data.List
     });
 }
-
+var open_add_index = 0;
 add = function () {
-    layer.open({
+    if(open_add_index > 0){
+        return false
+    }
+    open_add_index = layer.open({
         maxmin : true,
         type: 2,
         title: '添加SSH服务器',
-        shadeClose: true,
         shade: 0.4,
         mask: true,
         //maxmin: true, //开启最大化最小化按钮
         area: ['30vw', '50vh'],
-        content: '/add'
+        content: '/add',
+        shadeClose: false,
+        cancel: function(){
+            open_add_index = 0
+        }
     });
 }
 
@@ -166,16 +177,23 @@ del_callbacl = function (result) {
     getinfo()
 }
 
+open_terminal_index = 0;
 open_terminal = function (ID, sername) {
-    layer.open({
+    if(open_terminal_index > 0){
+        return false
+    }
+    open_terminal_index = layer.open({
         maxmin : true,
         type: 2,
         title: '打开SSH终端：' + sername,
-        shadeClose: true,
         shade: 0.4,
         mask: true,
         //maxmin: true, //开启最大化最小化按钮
         area: ['30vw', '30vh'],
-        content: '/openterm?id=' + ID + "&sername=" + encodeURI(sername)
+        content: '/openterm?id=' + ID + "&sername=" + encodeURI(sername),
+        shadeClose: false,
+        cancel: function(){
+            open_terminal_index = 0
+        }
     });
 }
