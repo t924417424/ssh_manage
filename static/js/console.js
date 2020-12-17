@@ -65,7 +65,7 @@ getinfo = function () {
         }
         , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
             if (res.token) {
-                window.localStorage.setItem("token", result.token)   //更新token
+                window.localStorage.setItem("token", res.token)   //更新token
             }
             if (res.code == 301 || res.code == 302) {   //Token校验失败或过期
                 layer.msg(res.msg, function () {
