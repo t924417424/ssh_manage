@@ -194,7 +194,7 @@ func (ssConn *SshConn) SessionWait(quitChan chan bool) {
 	//	log.Println("ssh session wait failed")
 	//	setQuit(quitChan)
 	//}
-	timer := time.NewTicker(time.Second * 3)
+	timer := time.NewTicker(time.Second * 5)
 	defer timer.Stop()
 	for {
 		select {

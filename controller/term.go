@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"ssh_manage/common"
 	"ssh_manage/common/core"
+	"ssh_manage/common/sftp_clients"
 	"ssh_manage/database"
 	"ssh_manage/model/Apiform"
 	"strconv"
@@ -52,8 +53,8 @@ func WsSsh(c *gin.Context) {
 	var ser_info Apiform.SerInfo //接收反序列化数据
 	var auth Apiform.WsAuth
 
-	if c.ShouldBindUri(&auth) != nil{
-		wsConn.WriteMessage(websocket.TextMessage,[]byte("参数错误\r\n"))
+	if c.ShouldBindUri(&auth) != nil {
+		wsConn.WriteMessage(websocket.TextMessage, []byte("参数错误\r\n"))
 		wsConn.Close()
 		return
 	}
@@ -83,20 +84,20 @@ func WsSsh(c *gin.Context) {
 		cache := database.Cache.Get()
 		defer cache.Close()
 		//log.Println(auth)
-		s_info,err := redis.Bytes(cache.Do("GET", auth.Sid))
+		s_info, err := redis.Bytes(cache.Do("GET", auth.Sid))
 		//log.Println(string(s_info))
-		if err != nil || len(s_info) == 0{
+		if err != nil || len(s_info) == 0 {
 			wsConn.WriteMessage(websocket.TextMessage, []byte("连接超时，请重试！\r\n"))
 			wsConn.Close()
 			return
 		}
-		if json.Unmarshal(s_info,&ser_info) != nil{
+		if json.Unmarshal(s_info, &ser_info) != nil {
 			wsConn.WriteMessage(websocket.TextMessage, []byte("服务器信息获取失败，请重试！\r\n"))
 			wsConn.Close()
 			return
 		}
 		//log.Println(ser_info)
-		if claims.Userid != ser_info.BindUser{			//验证权限
+		if claims.Userid != ser_info.BindUser { //验证权限
 			wsConn.WriteMessage(websocket.TextMessage, []byte("权限验证失败，请重试！\r\n"))
 			wsConn.Close()
 			return
@@ -110,10 +111,18 @@ func WsSsh(c *gin.Context) {
 	}
 	defer client.Close()
 	//startTime := time.Now()
-	ssConn, err := core.NewSshConn(cols, rows, client)		//加入sftp客户端
+	ssConn, err := core.NewSshConn(cols, rows, client) //加入sftp客户端
 	if core.WshandleError(wsConn, err) {
 		return
 	}
+	sftp_clients.Client.Lock()
+	sftp_clients.Client.C[auth.Sid] = &sftp_clients.MyClient{ser_info.BindUser, ssConn.SftpClient}
+	sftp_clients.Client.Unlock()
+	defer func() {
+		sftp_clients.Client.Lock()
+		delete(sftp_clients.Client.C, auth.Sid) //释放SFTP客户端
+		sftp_clients.Client.Unlock()
+	}()
 	defer ssConn.Close()
 	quitChan := make(chan bool, 3)
 

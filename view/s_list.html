@@ -44,7 +44,7 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="/static/assets/layui.all.js?v=1"></script>
 <script src="/static/js/net.js?v=1.3"></script>
-<script src="/static/js/console.js?v=1.99.1"></script>
+<script src="/static/js/console.js?v=1.99.2"></script>
 <script>
     var index = layer.load(0, {shade: [0.1,'#fff']});
     document.onreadystatechange = completeLoading;
@@ -53,6 +53,16 @@
         console.log("Loading Success")
         if (document.readyState == "complete") {
             layer.close(index);
+            if(window.localStorage.getItem("upload_info") == undefined){
+                layer.alert('更新提示', {
+                    skin: 'layui-layer-lan'
+                    ,closeBtn: 0
+                    ,anim: 4 //动画类型
+                    ,title: "更新提示"
+                    ,content: "在线SFTP上传功能已实现，可拖动本地文件或文件夹到终端窗口内进行上传操作！"
+                });
+            }
+            window.localStorage.setItem("upload_info","read")
         }
     }
 </script>

@@ -1,4 +1,23 @@
-var is_login = false;
+// var is_login = { watchValue:false };
+// var lastTimeValue=is_login.watchValue;
+// Object.defineProperty(is_login, 'watchValue', {
+//     get: function() {
+//         console.log('get：' + watchValue);
+//         return watchValue;
+//     },
+//     set: function(value) {
+//         watchValue = value;
+//         if(lastTimeValue!=watchValue){
+//             lastTimeValue=watchValue;
+//             console.log('value changed!! set: ' + watchValue);
+//             if(watchValue == true){
+//                 create_sftp()
+//             }
+//         }
+//     }
+// });
+
+var is_login = false
 const protocol = document.location.protocol.split(':')[0];
 var ws_p = "ws";
 if (protocol == "https") {
@@ -15,7 +34,16 @@ const auth = {
     type: "auth",
     token: token,
 }
+
+function completeLoading() {
+    console.log("Loading Success")
+    if (document.readyState == "complete") {
+        layer.close(index);
+    }
+}
+
 const socket = new WebSocket(ws_p + '://' + window.location.host + '/v1/term/' + GetQueryString("sid"));
+
 const term = new Terminal({cols: 180, rows: 50, screenKeys: true, cursorBlink: true, cursorStyle: "block"});
 term.open(document.getElementById('terms'));
 window.onresize = function () {
@@ -45,20 +73,51 @@ socket.onopen = function () {
     });
 
     socket.onmessage = function (msg) {
-        if(!is_login){
+        if (!is_login) {
+            term.clear()
+            create_sftp()
             is_login = true
         }
         term.write(msg.data);
+        update_path(msg.data)
     };
     socket.onerror = function (e) {
         is_login = false
+        layer.msg("链接出错：" + JSON.stringify(e))
         console.log(e);
     };
 
     socket.onclose = function (e) {
         is_login = false
-        console.log(e);
-        term.write("连接已断开:" + e.reason + "\r\n");
+        layer.msg("链接断开：" + JSON.stringify(e))
+        term.write("连接已断开" + "\r\n");
         //term.destroy();
     };
 };
+
+function update_path(str) {     //判断是否有效路径后更新当前所在路径，用于SFTP功能
+    //console.log(str)
+    let splice = String.fromCharCode(7)
+    let start = str.indexOf(":")
+    let end = str.indexOf(splice)
+    if (start >= 0 && end >= 0) {
+        let path = trimStr(str.substring(start + 1, end))
+        let verify = path.indexOf(" ")
+        if(verify == -1){
+            //console.log(path)
+            if(path.substr(0,1) == "~" || path.substr(0,1) == "/"){
+                if(path.substr(0,1) == "~"){    //替换~为用户目录
+                    path = server_pwd + path.substr(1)
+                }
+                //console.log(path)
+                if(session_path != path){
+                    session_path = path
+                }
+            }
+        }
+    }
+}
+
+function trimStr(str){
+    return str.replace(/(^\s*)|(\s*$)/g,"");
+}
