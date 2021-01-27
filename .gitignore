@@ -4,7 +4,9 @@
 *.dll
 *.so
 *.dylib
-
+.idea
+ssh_manage_linux.zip
+ssh_manage_windows.zip
 # Test binary, built with `go test -c`
 *.test
 

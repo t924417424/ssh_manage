@@ -62,8 +62,8 @@ sendmsg_callback = function (result) {
 }
 
 
-var countdowns = 120;
-var button = $('#send');
+let countdowns = 120;
+let button = $('#send');
 
 countdown = function () {
     setTimeout(function () {

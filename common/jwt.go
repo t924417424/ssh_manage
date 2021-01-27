@@ -2,10 +2,17 @@ package common
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"ssh_manage/config"
 	"time"
 )
 
-var jwt_ket = []byte("ss_jwt_token")
+func init() {
+	if config.Config.Jwt.Key == "ss_jwt_token" {
+		panic("请先修改Jwt key！")
+	}
+}
+
+var jwt_ket = []byte(config.Config.Jwt.Key)
 
 type Claims struct {
 	Userid uint

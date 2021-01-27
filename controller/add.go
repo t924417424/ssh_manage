@@ -11,16 +11,16 @@ import (
 
 func Addser(c *gin.Context) {
 	var resp Apiform.Resp
-	new_token := c.MustGet("token").(string)
-	if new_token != "" { //更新Token逻辑
-		resp.Token = new_token
+	newToken := c.MustGet("token").(string)
+	if newToken != "" { //更新Token逻辑
+		resp.Token = newToken
 	}
 	uid := c.MustGet("uid").(uint)
 	var info Apiform.Addser
 	resp.Code = errcode.C_from_err
 	resp.Msg = "数据错误"
 	if c.ShouldBind(&info) == nil {
-		if(common.CheckIp(info.Ip)){
+		if common.CheckIp(info.Ip) {
 			db := database.Get()
 			defer db.Close()
 			result := db.DB.Create(&model.Server{Ip: info.Ip,Port: info.Port,Username: info.Username,Password: info.Password,Nickname: info.Nickname,BindUser: uid})

@@ -12,9 +12,9 @@ import (
 
 func Info(c *gin.Context) {
 	var resp Apiform.Resp
-	new_token := c.MustGet("token").(string)
-	if new_token != "" { //更新Token逻辑
-		resp.Token = new_token
+	newToken := c.MustGet("token").(string)
+	if newToken != "" { //更新Token逻辑
+		resp.Token = newToken
 	}
 	uid := c.MustGet("uid").(uint)
 	var limit Apiform.Slist
@@ -45,9 +45,9 @@ func Info(c *gin.Context) {
 func UpdataNick(c *gin.Context) {
 	var resp Apiform.Resp
 	var edit Apiform.Edit
-	new_token := c.MustGet("token").(string)
-	if new_token != "" { //更新Token逻辑
-		resp.Token = new_token
+	newToken := c.MustGet("token").(string)
+	if newToken != "" { //更新Token逻辑
+		resp.Token = newToken
 	}
 	uid := c.MustGet("uid").(uint)
 	//nickname, name_exist := c.GetPostForm("nickname")
@@ -79,9 +79,9 @@ func UpdataNick(c *gin.Context) {
 func Resetpass(c *gin.Context) {
 	var resp Apiform.Resp
 	var edit Apiform.EditPass
-	new_token := c.MustGet("token").(string)
-	if new_token != "" { //更新Token逻辑
-		resp.Token = new_token
+	newToken := c.MustGet("token").(string)
+	if newToken != "" { //更新Token逻辑
+		resp.Token = newToken
 	}
 	uid := c.MustGet("uid").(uint)
 	//nickname, name_exist := c.GetPostForm("nickname")
@@ -113,9 +113,9 @@ func Resetpass(c *gin.Context) {
 func Del(c *gin.Context) {
 	var resp Apiform.Resp
 	var del Apiform.Edit
-	new_token := c.MustGet("token").(string)
-	if new_token != "" { //更新Token逻辑
-		resp.Token = new_token
+	newToken := c.MustGet("token").(string)
+	if newToken != "" { //更新Token逻辑
+		resp.Token = newToken
 	}
 	uid := c.MustGet("uid").(uint)
 	if c.ShouldBind(&del) == nil {
@@ -143,9 +143,9 @@ func Del(c *gin.Context) {
 func GetTerm(c *gin.Context) {
 	var resp Apiform.Resp
 	var term Apiform.GetTerm
-	new_token := c.MustGet("token").(string)
-	if new_token != "" { //更新Token逻辑
-		resp.Token = new_token
+	newToken := c.MustGet("token").(string)
+	if newToken != "" { //更新Token逻辑
+		resp.Token = newToken
 	}
 	uid := c.MustGet("uid").(uint)
 	resp.Code = errcode.C_from_err
@@ -158,7 +158,7 @@ func GetTerm(c *gin.Context) {
 		defer db.Close()
 		result := db.DB.Model(&model.Server{}).First(&server)
 		if result.RowsAffected == 1 && result.Error == nil {
-			db.DB.Model(&model.Server{}).Where(&server).Update(model.Server{BeforeTime: jtime.JsonTime{time.Now()}})
+			db.DB.Model(&model.Server{}).Where(&server).Update(model.Server{BeforeTime: jtime.JsonTime{Time: time.Now()}})
 			sid, err := term.Decode(server)
 			//log.Println(sid)
 			if err == nil {

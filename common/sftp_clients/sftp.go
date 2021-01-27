@@ -36,14 +36,14 @@ type MyClient struct {
 }
 
 type clients struct {
-	sync.RWMutex
+	*sync.RWMutex
 	C    map[string]*MyClient
 }
 
 var Client clients
 
 func init() {
-	Client = clients{C: make(map[string]*MyClient, 1000)}
+	Client = clients{new(sync.RWMutex),make(map[string]*MyClient)}
 }
 
 func (c *MyClient) ReceiveWsMsg(wsConn *websocket.Conn, exitCh chan bool) {

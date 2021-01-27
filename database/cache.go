@@ -7,13 +7,13 @@ import (
 	"time"
 )
 
-var redis_conf = config.Config.Redis
+var redisConf = config.Config.Redis
 
 var Cache *redigo.Pool
 
 func init() {
-	var addr = fmt.Sprintf("%s:%d",redis_conf.Host,redis_conf.Port)
-	var password = redis_conf.Password
+	var addr = fmt.Sprintf("%s:%d", redisConf.Host, redisConf.Port)
+	var password = redisConf.Password
 	Cache = poolInitRedis(addr, password)
 }
 
@@ -21,7 +21,7 @@ func poolInitRedis(server string, password string) *redigo.Pool {
 	return &redigo.Pool{
 		MaxIdle:     2, //空闲数
 		IdleTimeout: 240 * time.Second,
-		MaxActive:   redis_conf.Poolsize, //最大数
+		MaxActive:   redisConf.Poolsize, //最大数
 		Dial: func() (redigo.Conn, error) {
 			c, err := redigo.Dial("tcp", server)
 			if err != nil {

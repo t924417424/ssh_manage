@@ -17,8 +17,11 @@ port = 6379
 password = ""           #没有则不填
 poolsize = 10           #Redis连接池大小
 
-[Alisms]
+[Alisms]    #阿里云短信配置
 accessid = "—"
 accesskey = "-"
 signname = "-"  #短信签名
 template = "-"  #模板代码
+
+[Jwt]
+key = "ss_jwt_token"

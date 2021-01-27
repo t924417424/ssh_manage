@@ -11,6 +11,11 @@ type config struct {
 	Database *database
 	Redis    *redis
 	Alisms   *alisms
+	Jwt		 *jwtInfo
+}
+
+type jwtInfo struct {
+	Key string
 }
 
 type alisms struct {
