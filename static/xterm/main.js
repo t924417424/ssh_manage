@@ -59,7 +59,7 @@ socket.onopen = function () {
             type: "cmd",
             cmd: data,
         }
-        socket.send(JSON.stringify(sdata));
+        socket.send(str2utf8(JSON.stringify(sdata)));
     });
 
     term.on('resize', size => {
@@ -78,8 +78,17 @@ socket.onopen = function () {
             create_sftp()
             is_login = true
         }
-        term.write(msg.data);
-        update_path(msg.data)
+        let reader = new FileReader();
+        reader.onload = function (event) {
+            let content = reader.result;//内容就在这里
+            //delete reader
+            //console.log(content)
+            term.write(content);
+            update_path(content);
+        };
+        reader.readAsText(msg.data);
+        //term.write(msg.data);
+
     };
     socket.onerror = function (e) {
         is_login = false
@@ -95,6 +104,11 @@ socket.onopen = function () {
     };
 };
 
+function str2utf8(str) {
+    let encoder = new TextEncoder('utf8');
+    return encoder.encode(str);
+}
+
 function update_path(str) {     //判断是否有效路径后更新当前所在路径，用于SFTP功能
     //console.log(str)
     let splice = String.fromCharCode(7)
@@ -103,14 +117,14 @@ function update_path(str) {     //判断是否有效路径后更新当前所在�
     if (start >= 0 && end >= 0) {
         let path = trimStr(str.substring(start + 1, end))
         let verify = path.indexOf(" ")
-        if(verify == -1){
+        if (verify == -1) {
             //console.log(path)
-            if(path.substr(0,1) == "~" || path.substr(0,1) == "/"){
-                if(path.substr(0,1) == "~"){    //替换~为用户目录
+            if (path.substr(0, 1) == "~" || path.substr(0, 1) == "/") {
+                if (path.substr(0, 1) == "~") {    //替换~为用户目录
                     path = server_pwd + path.substr(1)
                 }
                 //console.log(path)
-                if(session_path != path){
+                if (session_path != path) {
                     session_path = path
                 }
             }
@@ -118,6 +132,6 @@ function update_path(str) {     //判断是否有效路径后更新当前所在�
     }
 }
 
-function trimStr(str){
-    return str.replace(/(^\s*)|(\s*$)/g,"");
+function trimStr(str) {
+    return str.replace(/(^\s*)|(\s*$)/g, "");
 }

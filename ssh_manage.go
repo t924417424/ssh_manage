@@ -55,7 +55,7 @@ func main() {
 		api.POST("/login", controller.Login)
 		api.POST("/send", controller.Send)
 		api.GET("/term/:sid", controller.WsSsh)
-		api.GET("/sftp/:sid", controller.Sftp_ssh)
+		api.GET("/sftp/:sid", controller.SftpSsh)
 		api.Use(middleware.Auth()).GET("/userinfo", controller.Info)
 		api.Use(middleware.Auth()).POST("/nickname", controller.UpdataNick)
 		api.Use(middleware.Auth()).POST("/addser", controller.Addser)

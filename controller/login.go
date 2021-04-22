@@ -24,12 +24,12 @@ func Login(c *gin.Context) {
 			db := database.Get()
 			defer db.Close()
 			db.DB.Where(model.User{Phone: user.Phone}).FirstOrCreate(&userinfo)
-			new_token, err := common.ReleaseToken(userinfo.ID)
+			newToken, err := common.ReleaseToken(userinfo.ID)
 			if err == nil && userinfo.ID > 0 {
 				resp.Code = errcode.C_nil_err
 				resp.Msg = "登陆成功"
 				resp.Data = userinfo
-				resp.Token = new_token
+				resp.Token = newToken
 			} else {
 				resp.Code = errcode.S_auth_err
 				resp.Msg = "Token创建失败"
