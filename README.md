@@ -1,4 +1,10 @@
 # ssh_manage
+
+![](https://img.shields.io/github/license/t924417424/ssh_manage)
+![](https://img.shields.io/github/stars/t924417424/ssh_manage)
+![](https://img.shields.io/github/forks/t924417424/ssh_manage)
+![](https://img.shields.io/github/issues/t924417424/ssh_manage)
+
 go版本多用户webssh管理工具
 
 项目仅用于学习交流，未经允许禁止任何其他用途
