@@ -69,8 +69,8 @@ template = "-"  #模板代码
 ## 运行
 > （Mysql会在首次使用时自动初始化）
 ```shell script
-go build & ./ssh_manage
-go run server.go 
+- go build & ./ssh_manage
+- go run ssh_manage.go 
 ```
 
 ## 前端
