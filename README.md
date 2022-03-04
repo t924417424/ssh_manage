@@ -25,9 +25,11 @@ ssh2ws部分代码修改自https://github.com/hequan2017/go-webssh
     2020/12/16 前端新增文件/文件夹拖动到Terminal的自动解析功能（SFTP需要），修改layer弹出窗口逻辑，增加回车提交事件
     2020/12/17 增加在线sftp文件上传功能 *
 ## 开发计划
-✔ ssh功能
+[x] ssh功能
 
-✔ sftp文件上传功能
+[x] sftp文件上传功能
+
+[]  操作回放
 
 ## 在线演示
 [点击进入SSH云管理平台](https://www.do18.cn)
